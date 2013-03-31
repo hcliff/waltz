@@ -11,6 +11,11 @@
   `(waltz.state/add-event ~sm ~name (fn ~params
                                       ~@body)))
 
+(defmacro constraint [sm & body]
+  (if (second body)
+    `(waltz.state/constraint* ~sm (fn ~@body))
+    `(waltz.state/constraint* ~sm ~@body)))
+
 (defmacro in [sm & body]
   (if (second body)
     `(waltz.state/in* ~sm (fn ~@body))

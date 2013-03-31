@@ -17,20 +17,21 @@
 (defn state* []
   {:in []
    :out []
-   :constraints []})
+   :constraint []})
 
-(defn machine [& [n]]
-  (atom {:debug true
-         :name (name n)
-         :current #{}
-         :states {}
-         :events {}}))
-
-(defn get-name [sm]
-  (get-in-sm sm [:name]))
+(defn machine [{:keys [label current debug]}]
+  "Allow specification of the starting state"
+    (atom {:debug (or debug true)
+           :name label
+           :current #{current}
+           :states {}
+           :events {}}))
 
 (defn get-in-sm [sm ks]
   (get-in @sm ks))
+
+(defn get-name [sm]
+  (get-in-sm sm [:name]))
 
 (defn assoc-sm [sm ks v]
   (swap! sm #(assoc-in % ks v)))
@@ -62,13 +63,13 @@
 (defn out* [state fn]
   (update-in state [:out] conj fn))
 
-(defn constraint [state fn]
+(defn constraint* [state fn]
   (update-in state [:constraint] conj fn))
 
 (defn can-transition? [sm state]
-  (let [trans (get-in-sm sm [:states state :constraints])]
+  (let [trans (get-in-sm sm [:states state :constraint])]
     (if trans
-      (every? #(% state) trans)
+      (every? #(% (current sm) state) trans)
       true)))
 
 (defn set [sm states & context]
