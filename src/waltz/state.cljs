@@ -19,10 +19,11 @@
    :out []
    :constraint []})
 
-(defn machine [{:keys [label current debug]}]
+(defn machine [{:keys [label current debug data]}]
   "Allow specification of the starting state"
     (atom {:debug (or debug true)
            :name label
+           :data (or data {})
            :current #{current}
            :states {}
            :events {}}))
@@ -32,6 +33,9 @@
 
 (defn get-name [sm]
   (get-in-sm sm [:name]))
+
+(defn get-data [sm k]
+  (@sm :data))
 
 (defn assoc-sm [sm ks v]
   (swap! sm #(assoc-in % ks v)))
