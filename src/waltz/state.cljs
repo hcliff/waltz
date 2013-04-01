@@ -34,7 +34,7 @@
 (defn get-name [sm]
   (get-in-sm sm [:name]))
 
-(defn get-data [sm k]
+(defn get-data [sm]
   (@sm :data))
 
 (defn assoc-sm [sm ks v]
