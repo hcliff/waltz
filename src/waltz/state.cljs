@@ -19,11 +19,11 @@
    :out []
    :constraint []})
 
-(defn machine [{:keys [label current debug data]}]
+(defn machine [{:keys [label current debug data] :or {debug true data {}}}]
   "Allow specification of the starting state"
-    (atom {:debug (or debug true)
+    (atom {:debug debug
            :name label
-           :data (or data {})
+           :data data
            :current #{current}
            :states {}
            :events {}}))
